@@ -1,12 +1,39 @@
-{
-  "version": 2,
-  "builds": [
-    { "src": "package.json", "use": "@vercel/static-build" }
-  ],
-  "buildCommand": "npm run build",
-  "outputDirectory": "build",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
-}
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/package.json b/package.json
+index efd880110b464cb19be85ee285a865ac79aeee95..bdb1e663b5cefdd0bad39ff2610a407d9f117c8a 100644
+--- a/package.json
++++ b/package.json
+@@ -1,29 +1,30 @@
+ {
+   "name": "aleooo",
+   "version": "1.0.0",
+   "private": true,
++  "homepage": ".",
+   "scripts": {
+     "start": "react-scripts start",
+     "build": "react-scripts build",
+     "test": "react-scripts test",
+     "eject": "react-scripts eject"
+   },
+   "dependencies": {
+     "framer-motion": "^11.0.0",
+     "react": "^18.2.0",
+     "react-dom": "^18.2.0",
+     "react-scripts": "5.0.1",
+     "tailwindcss": "^3.4.0"
+   },
+   "devDependencies": {
+     "autoprefixer": "^10.4.20",
+     "postcss": "^8.4.31"
+   },
+   "browserslist": {
+     "production": [">0.2%", "not dead", "not op_mini all"],
+     "development": [
+       "last 1 chrome version",
+       "last 1 firefox version",
+       "last 1 safari version"
+     ]
+   }
+ 
+EOF
+)
