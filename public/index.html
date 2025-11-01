@@ -1,1 +1,23 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Aleo Landing</title><script defer="defer" src="/static/js/main.2c4defa8.js"></script><link href="/static/css/main.5fb8eae5.css" rel="stylesheet"></head><body><div id="root"></div></body></html>
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/public/index.html b/public/index.html
+index 2846c6979dbfefcf0e0f6f46116d8093f430f4ec..4271e88e2a1d46695957426c49a92370d1a844e9 100644
+--- a/public/index.html
++++ b/public/index.html
+@@ -1 +1,13 @@
+-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Aleo Landing</title><script defer="defer" src="/static/js/main.2c4defa8.js"></script><link href="/static/css/main.5fb8eae5.css" rel="stylesheet"></head><body><div id="root"></div></body></html>
++<!DOCTYPE html>
++<html lang="en">
++  <head>
++    <meta charset="utf-8" />
++    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
++    <meta name="viewport" content="width=device-width, initial-scale=1" />
++    <title>Aleo Landing</title>
++  </head>
++  <body>
++    <noscript>You need to enable JavaScript to run this app.</noscript>
++    <div id="root"></div>
++  </body>
++</html>
+ 
+EOF
+)
