@@ -6,11 +6,15 @@ function GlowingCursor() {
   const trailRef = useRef([]);
   const rafRef = useRef(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    let w = (canvas.width = window.innerWidth);
-    let h = (canvas.height = window.innerHeight);
+useEffect(() => {
+  const canvas = canvasRef.current;
+  if (!canvas) return; // защита от null
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return; // защита от ошибки getContext
+
+  let w = (canvas.width = window.innerWidth);
+  let h = (canvas.height = window.innerHeight);
 
     function resize() {
       w = canvas.width = window.innerWidth;
