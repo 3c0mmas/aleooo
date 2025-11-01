@@ -6,17 +6,17 @@ function GlowingCursor() {
   const trailRef = useRef([]);
   const rafRef = useRef(null);
 
-useEffect(() => {
-  const canvas = canvasRef.current;
-  if (!canvas) return; // защита от null
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return; // защита от null
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return; // защита от ошибки getContext
 
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return; // защита от ошибки getContext
-
-  let w = (canvas.width = window.innerWidth);
-  let h = (canvas.height = window.innerHeight);
+    let w = (canvas.width = window.innerWidth);
+    let h = (canvas.height = window.innerHeight);
 
     function resize() {
+      if (!canvas) return;
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
     }
@@ -24,7 +24,6 @@ useEffect(() => {
 
     const MAX_POINTS = 20;
     const DECAY = 0.86;
-
     const mainColor = "#EEFFA8";
     const glowColor = "#C4FFC2";
 
@@ -81,12 +80,11 @@ useEffect(() => {
     }
 
     function draw() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
       ctx.save();
 
-      if (trailRef.current.length > 1) {
-        drawGlowTrail(trailRef.current);
-      }
+      if (trailRef.current.length > 1) drawGlowTrail(trailRef.current);
 
       for (let i = 0; i < trailRef.current.length; i++) {
         const p = trailRef.current[i];
@@ -107,8 +105,8 @@ useEffect(() => {
     }
 
     function onMove(e) {
-      const x = e.clientX ?? (e.touches && e.touches[0].clientX) ?? 0;
-      const y = e.clientY ?? (e.touches && e.touches[0].clientY) ?? 0;
+      const x = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
+      const y = e.clientY ?? (e.touches && e.touches[0]?.clientY) ?? 0;
       pushPoint(x, y);
     }
 
@@ -148,114 +146,28 @@ useEffect(() => {
 export default function AleoLanding() {
   const [showMore, setShowMore] = useState(false);
 
-  const tweets = [
-    {
-      date: "October 27, 2025",
-      text: "Exploring the future of privacy at Money20/20 Las Vegas! Join us at Aleo’s Privacy Lounge.",
-      link: "https://x.com/AleoHQ/status/1982800488736465064",
-    },
-    {
-      date: "October 25, 2025",
-      text: "Aleo joins Binance Alpha! Building bridges for privacy-first innovation.",
-      link: "https://x.com/AleoHQ/status/1982452680875270299",
-    },
-    {
-      date: "October 23, 2025",
-      text: "Our Istanbul event brought together amazing builders from around the globe.",
-      link: "https://x.com/AleoHQ/status/1981834085329694747",
-    },
-    {
-      date: "October 21, 2025",
-      text: "zk-proofs verified, privacy preserved. The Aleo mainnet continues to grow.",
-      link: "https://x.com/AleoHQ/status/1981443533933367677",
-    },
-    {
-      date: "October 20, 2025",
-      text: "From Shanghai to Paris — Aleo’s global developer workshops keep expanding!",
-      link: "https://x.com/AleoHQ/status/1981392940045091209",
-    },
-  ];
-
-  const articles = [
-    {
-      date: "October 27, 2025",
-      title: "Paxos Labs and ANF launch USAD Private Stablecoin",
-      link: "https://aleo.org/post/paxos-labs-and-ANF-launch-USAD-Private-Stablecoin/",
-    },
-    {
-      date: "October 25, 2025",
-      title: "Aleo joins Binance Alpha",
-      link: "https://aleo.org/post/aleo-joins-binance-alpha/",
-    },
-    {
-      date: "October 22, 2025",
-      title: "Aleo & Request Finance: Private Payments Partnership",
-      link: "https://aleo.org/post/aleo-request-finance-private-payments-partnership/",
-    },
-    {
-      date: "October 20, 2025",
-      title: "Aleo joins Global Dollar Network: Private Stablecoin",
-      link: "https://aleo.org/post/aleo-joins-global-dollar-network-private-stablecoin/",
-    },
-    {
-      date: "October 18, 2025",
-      title: "Aleo Token Revolut Listing",
-      link: "https://aleo.org/post/aleo-token-revolut-listing/",
-    },
-  ];
-
   const events = [
     {
       time: "6:00 PM - 9:00 PM GMT+9, November 1 2025",
-      location: "MIDORI.so SHIBUYA / CryptoBase, Shibuya, Tokyo",
+      location: "Tokyo, Japan",
       title: "Aleo: Tokyo Compliant Private Token Workshop",
       link: "https://luma.com/aleotokyo2025workshop",
     },
     {
       time: "1:00 PM - 4:00 PM EDT, November 1 2025",
-      location: "Startuptive | Coworking and Team Office, Toronto, Ontario",
+      location: "Toronto, Ontario",
       title: "Aleo: Toronto Compliant Private Token Workshop",
       link: "https://luma.com/aleotorontooctober2025workshop",
     },
     {
-      time: "2:30 PM OCTOBER 27 2025 - OCTOBER 29 2025 PDT",
+      time: "2:30 PM OCT 27–29 2025 PDT",
       location: "Las Vegas, Nevada",
       title: "Aleo's Privacy Lounge @Money20/20",
       link: "https://luma.com/4s1lxlc9",
     },
-    {
-      time: "5:00 PM OCTOBER 22 2025 GMT+3",
-      location: "Istanbul, Turkey",
-      title: "Aleo x Yıldız Technical University Blockchain Club",
-      link: "https://luma.com/pdjgokou",
-    },
-    {
-      time: "12:00 PM OCTOBER 21 2025 GMT+1",
-      location: "Uyo, Nigeria",
-      title: "Aleo: Uyo Compliant Private Token Workshop",
-      link: "https://luma.com/aleouyooctober2025workshop",
-    },
-    {
-      time: "2:00 PM OCTOBER 19 2025 GMT+8",
-      location: "Shanghai, China",
-      title: "揭秘下一代隐私网络！Aleo 上海 Dev Party 邀你面对面话 Web3 未来！",
-      link: "https://luma.com/xwjcv6xh",
-    },
-    {
-      time: "9:00 AM OCTOBER 19 2025 GMT+7",
-      location: "Ho Chi Minh, Vietnam",
-      title: "Aleo: HCMC Compliant Private Token Workshop",
-      link: "https://luma.com/aleohcmc2025workshop",
-    },
-    {
-      time: "6:30 PM OCTOBER 13 2025 GMT+2",
-      location: "Paris, France",
-      title: "Aleo x Crypto Mondays x SheFi Paris",
-      link: "https://luma.com/zw8oesrq",
-    },
   ];
 
-  const visibleEvents = showMore ? events : events.slice(0, 6);
+  const visibleEvents = showMore ? events : events.slice(0, 3);
 
   return (
     <motion.div className="relative min-h-screen font-sans text-gray-100 bg-black overflow-x-hidden">
@@ -267,13 +179,20 @@ export default function AleoLanding() {
             <div className="w-10 h-10 rounded-md bg-gradient-to-tr from-[#121216] to-[#1b1b20] border border-white/6 flex items-center justify-center shadow-sm">
               <span className="text-xs font-semibold tracking-wider">A</span>
             </div>
-            <div className="text-sm text-gray-300">Aleo — Private by design</div>
+            <div className="text-sm text-gray-300">
+              Aleo — Private by design
+            </div>
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-400">
-            <a href="#about" className="hover:text-white">About</a>
-            <a href="#features" className="hover:text-white">Features</a>
-            <a href="#events" className="hover:text-white">Events</a>
-            <a href="#community" className="hover:text-white">Community</a>
+            <a href="#about" className="hover:text-white">
+              About
+            </a>
+            <a href="#events" className="hover:text-white">
+              Events
+            </a>
+            <a href="#community" className="hover:text-white">
+              Community
+            </a>
           </div>
         </nav>
       </header>
@@ -281,29 +200,18 @@ export default function AleoLanding() {
       <main className="z-20 relative">
         <section id="about" className="max-w-6xl mx-auto px-6 py-20">
           <h2 className="text-3xl font-semibold text-white mb-4">About Aleo</h2>
-          <p className="text-gray-300 max-w-3xl">Aleo enables developers to build private applications with zero-knowledge proofs executed off-chain and verified on-chain. Its mission is to make privacy-preserving computing accessible to everyone, empowering users to control their own data.</p>
-        </section>
-
-        <section id="features" className="max-w-6xl mx-auto px-6 py-20">
-          <h3 className="text-2xl font-semibold text-white mb-8">Features</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h4 className="text-lg font-semibold text-white mb-2">Private by Default</h4>
-              <p className="text-gray-400 text-sm">All application logic can be executed privately using zk-proofs, ensuring total confidentiality for users and developers alike.</p>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h4 className="text-lg font-semibold text-white mb-2">Developer-First</h4>
-              <p className="text-gray-400 text-sm">Aleo provides powerful SDKs, local development tools, and documentation to help developers build privacy-preserving apps faster.</p>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h4 className="text-lg font-semibold text-white mb-2">Composable & Secure</h4>
-              <p className="text-gray-400 text-sm">Applications on Aleo can interoperate securely, enabling scalable private DeFi and beyond with modular, verifiable components.</p>
-            </div>
-          </div>
+          <p className="text-gray-300 max-w-3xl">
+            Aleo enables developers to build private applications with
+            zero-knowledge proofs executed off-chain and verified on-chain. Its
+            mission is to make privacy-preserving computing accessible to
+            everyone, empowering users to control their own data.
+          </p>
         </section>
 
         <section id="events" className="max-w-6xl mx-auto px-6 py-20">
-          <h3 className="text-3xl font-semibold text-white mb-8">Aleo Global Events</h3>
+          <h3 className="text-3xl font-semibold text-white mb-8">
+            Aleo Global Events
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
               {visibleEvents.map((event, idx) => (
@@ -318,7 +226,9 @@ export default function AleoLanding() {
                 >
                   <div className="text-sm text-gray-400">{event.time}</div>
                   <div className="text-xs text-gray-500">{event.location}</div>
-                  <h4 className="mt-3 text-lg font-semibold text-white group-hover:text-[#EEFFA8] transition-colors">{event.title}</h4>
+                  <h4 className="mt-3 text-lg font-semibold text-white group-hover:text-[#EEFFA8] transition-colors">
+                    {event.title}
+                  </h4>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -330,62 +240,6 @@ export default function AleoLanding() {
             >
               {showMore ? "Show Less Events" : "Show More Events"}
             </button>
-          </div>
-        </section>
-
-        <section id="community" className="max-w-6xl mx-auto px-6 py-20">
-          <h3 className="text-3xl font-semibold text-white mb-8">Aleo Community Hub</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tweets.map((url, idx) => (
-              <div
-                key={idx}
-                onClick={() => window.open(url, "_blank")}
-                className="cursor-pointer bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:bg-[#EEFFA8]/10 hover:shadow-[0_0_25px_#EEFFA8aa] hover:scale-[1.03]"
-              >
-                <div className="text-gray-300 text-sm">Tweet #{idx + 1}</div>
-                <h4 className="mt-3 text-lg font-semibold text-white hover:text-[#EEFFA8] transition-colors">View post on X</h4>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="governance" className="max-w-6xl mx-auto px-6 py-20">
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-10 text-center">
-            <h3 className="text-3xl font-semibold text-white mb-4">Aleo Governance</h3>
-            <p className="text-gray-300 max-w-2xl mx-auto mb-6">Propose. Vote. Change. Shape the future of the Aleo Network.</p>
-            <a
-              href="https://vote.aleo.org/"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block px-8 py-3 bg-[#EEFFA8]/10 border border-[#EEFFA8]/30 rounded-xl text-[#EEFFA8] hover:bg-[#EEFFA8]/20 transition"
-            >
-              Join Governance Platform
-            </a>
-          </div>
-        </section>
-
-        <section id="articles" className="max-w-6xl mx-auto px-6 py-20">
-          <h3 className="text-3xl font-semibold text-white mb-8">Aleo Blog Highlights</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article, idx) => (
-              <div
-                key={idx}
-                onClick={() => window.open(article.link, "_blank")}
-                className="cursor-pointer bg-white/5 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:bg-[#EEFFA8]/10 hover:shadow-[0_0_25px_#EEFFA8aa] hover:scale-[1.03]"
-              >
-                <h4 className="text-lg font-semibold text-white hover:text-[#EEFFA8] transition-colors">{article.title}</h4>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <a
-              href="https://aleo.org/blog/"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block px-6 py-3 bg-[#EEFFA8]/10 border border-[#EEFFA8]/30 rounded-xl text-[#EEFFA8] hover:bg-[#EEFFA8]/20 transition"
-            >
-              View More Articles
-            </a>
           </div>
         </section>
 
